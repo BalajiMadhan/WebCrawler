@@ -49,7 +49,14 @@ public class WebCrawlerService implements Runnable {
         }
     }
 
-    public WebCrawlerResults crawl(Internet internetData, String fileName) {
+    /**
+     * @param internetData
+     * @param fileName
+     * @method crawl
+     * @Description This method actually visit all the pages and gets the link in
+     *              each page and continue crawling with all other links
+     */
+    public void crawl(Internet internetData, String fileName) {
         Set<String> visitedLink = new HashSet<>();
         Queue<String> pagesToVisitQueue = new LinkedList<>();
         List<Page> pagesFromInternet = internetData.getPages();
@@ -78,9 +85,16 @@ public class WebCrawlerService implements Runnable {
         synchronized (WebCrawlerService.class) {
             webCrawlResultDisplay(System.out, crawlerResults, fileName);
         }
-        return crawlerResults;
     }
 
+    /**
+     * @param out
+     * @param crawlerResults
+     * @param fileName
+     * @Method webCrawlResultDisplay
+     * @Description This method display the final output of successfully visited
+     *              ,Skipped and Error address
+     */
     public void webCrawlResultDisplay(PrintStream out, WebCrawlerResults crawlerResults, String fileName) {
         ObjectMapper mapper = new ObjectMapper();
         out.println(WebCrawlerConstant.OUTPUT + fileName);
@@ -100,6 +114,12 @@ public class WebCrawlerService implements Runnable {
         out.println(WebCrawlerConstant.SEPERATOR + WebCrawlerConstant.END_OF_OUTPUT + WebCrawlerConstant.SEPERATOR);
     }
 
+    /**
+     * @param resourceFile
+     * @throws IOException
+     * @method loadJsonFileFromResource
+     * @Description This method fetch data from internet json file.
+     */
     public String loadJsonFileFromResource(String resourceFile) throws IOException {
         URL url = Resources.getResource(resourceFile);
         return Resources.toString(url, Charsets.UTF_8);
